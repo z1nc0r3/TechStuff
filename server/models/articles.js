@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const articleSheme = new mongoose.Schema({
-	headline: string,
-	subheadline: string,
-	content: string,
-	author: string,
+	headline: String,
+	subheadline: String,
+	content: String,
+	author: String,
 	image: {
 		data: Buffer,
 		contentType: String,
