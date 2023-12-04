@@ -1,17 +1,18 @@
 // Required modules
 const express = require("express");
-const bodyParser = require("body-parser");
-const path = require("path");
-const database = require("./server/config/database.js");
-
+const methodOverride = require('method-override');
 const session = require("express-session");
+const path = require("path");
+
+const database = require("./server/config/database.js");
 const connectDB = require("./server/config/database.js");
 
 const PORT = 3000;
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride('_method'));
 app.set("view engine", "ejs");
 
 // Database connection
