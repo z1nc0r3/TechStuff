@@ -6,16 +6,9 @@ const ObjectID = require("mongodb").ObjectId;
 
 const Users = require("../models/users.js");
 
-const storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		cb(null, "./public/uploads/");
-	},
-	filename: (req, file, cb) => {
-		cb(null, `${Date.now()}-${file.originalname}`);
-	},
-});
+const storage = multer.memoryStorage();
 
-const upload = multer({ storage: storage }).single("image");
+const upload = multer({ storage: storage });
 
 // User login page
 exports.login = async (req, res) => {
@@ -74,7 +67,7 @@ exports.register = async (req, res) => {
 // User registration handler
 exports.registerHandler = async (req, res) => {
 	try {
-		upload(req, res, async function (err) {
+		upload.single("image")(req, res, async function (err) {
 			if (err instanceof multer.MulterError) {
 				return res.status(500).json(err);
 			} else if (err) {
@@ -83,9 +76,8 @@ exports.registerHandler = async (req, res) => {
 
 			// Get user data
 			const { firstname, lastname, email, password } = req.body;
-			const imagePath = path.join(__dirname, "../../public/uploads/", req.file.filename);
 			const image = {
-				data: fs.readFileSync(imagePath),
+				data: req.file.buffer,
 				contentType: req.file.mimetype,
 			};
 
@@ -131,8 +123,9 @@ exports.account = async (req, res) => {
 	try {
 		const { userId } = req.session;
 		const user = await Users.findById(userId);
+		const profileImage = user.image.data.toString("base64");
 		const title = "Account";
-		res.render("user/account", { title, user });
+		res.render("user/account", { title, user, profileImage });
 	} catch (error) {
 		console.log(error);
 		res.redirect("/");
