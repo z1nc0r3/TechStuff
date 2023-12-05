@@ -16,9 +16,39 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).single("image");
 
+// User login page
 exports.login = async (req, res) => {
-	const title = "Login";
-	res.render("login", { title });
+	// If user is already logged in, redirect to home page
+	if (req.session.isLoggedIn) {
+		return res.redirect("/");
+	}
+	
+    const title = "Login";
+    const message = req.flash('error');
+	console.log(message);
+    res.render("user/login", { title, message });
+};
+
+// User login handler
+exports.loginHandler = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await Users.findOne({ email, password });
+
+        if (!user) {
+            req.flash('error', 'Invalid email or password.');
+            return res.redirect('/login');
+        }
+
+        req.session.isLoggedIn = true;
+        req.session.userId = user._id;
+        req.session.firstname = user.firstname;
+        res.redirect("/");
+    } catch (error) {
+        console.log(error);
+        req.flash('error', 'An error occurred.');
+        res.redirect("/login");
+    }
 };
 
 // User registration page
