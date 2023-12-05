@@ -21,3 +21,13 @@
 .font-weight-600 {
     font-weight: 600 !important;
 }
+
+.mh-420 {
+    min-height: 420px;
+}
+
+.read-more-btn {
+    position: absolute;
+    bottom: 0;
+    margin-bottom: 15px;
+}

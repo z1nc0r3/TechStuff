@@ -14,7 +14,8 @@ exports.getArticles = async (req, res) => {
 	res.locals.userId = req.session.userId;
 
 	const title = "Home";
-	res.render("home", { title });
+	const articles = await Articles.find().sort({ _id: -1 });
+	res.render("home", { title, articles });
 };
 
 // Add article page
