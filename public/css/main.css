@@ -13,3 +13,11 @@
 .vh-75 {
     min-height: 75vh;
 }
+
+.bg-blue {
+    background-color: #c7ebff !important;
+}
+
+.font-weight-600 {
+    font-weight: 600 !important;
+}
