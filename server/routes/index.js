@@ -24,4 +24,8 @@ router.get('/update', userController.update);
 router.post('/update', userController.updateHandler);
 router.post('/user/delete', userController.deleteUser);
 
+// Add article
+router.get('/add', articleController.addArticle);
+router.post('/add', articleController.addArticleHandler);
+
 module.exports = router;
