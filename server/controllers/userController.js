@@ -18,11 +18,14 @@ const upload = multer({ storage: storage }).single("image");
 
 // User login page
 exports.login = async (req, res) => {
+	res.locals.firstname = req.session.firstname;
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+
 	// If user is already logged in, redirect to home page
 	if (req.session.isLoggedIn) {
 		return res.redirect("/");
 	}
-	
+
     const title = "Login";
     const message = req.flash('error');
 	console.log(message);
@@ -43,6 +46,8 @@ exports.loginHandler = async (req, res) => {
         req.session.isLoggedIn = true;
         req.session.userId = user._id;
         req.session.firstname = user.firstname;
+
+		console.log(req.session);
         res.redirect("/");
     } catch (error) {
         console.log(error);
@@ -53,6 +58,14 @@ exports.loginHandler = async (req, res) => {
 
 // User registration page
 exports.register = async (req, res) => {
+	res.locals.firstname = req.session.firstname;
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+
+	// If user is already logged in, redirect to home page
+	if (req.session.isLoggedIn) {
+		return res.redirect("/");
+	}
+
 	const title = "Register";
 	res.render("user/register", { title });
 };
