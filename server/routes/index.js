@@ -1,31 +1,32 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userController = require('../controllers/userController.js');
-const articleController = require('../controllers/articleController.js');
-
-router.get('/', articleController.getArticles);
+const userController = require("../controllers/userController.js");
+const articleController = require("../controllers/articleController.js");
 
 // Login routes
-router.get('/login', userController.login);
-router.post('/login', userController.loginHandler);
+router.get("/login", userController.login);
+router.post("/login", userController.loginHandler);
 
 // Register routes
-router.get('/register', userController.register);
-router.post('/register', userController.registerHandler);
+router.get("/register", userController.register);
+router.post("/register", userController.registerHandler);
 
 // Logout route
-router.get('/logout', userController.logout);
+router.get("/logout", userController.logout);
 
 // Account route
-router.get('/account', userController.account);
+router.get("/account", userController.account);
 
 // Account actions
-router.get('/update', userController.update);
-router.post('/update', userController.updateHandler);
-router.post('/user/delete', userController.deleteUser);
+router.get("/update", userController.update);
+router.post("/update", userController.updateHandler);
+router.post("/user/delete", userController.deleteUser);
+
+// Show all articles
+router.get("/", articleController.getArticles);
 
 // Add article
-router.get('/add', articleController.addArticle);
-router.post('/add', articleController.addArticleHandler);
+router.get("/add", articleController.addArticle);
+router.post("/add", articleController.addArticleHandler);
 
 module.exports = router;
