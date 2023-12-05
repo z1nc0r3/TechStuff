@@ -132,8 +132,57 @@ exports.account = async (req, res) => {
 	}
 };
 
+// User update page
+exports.update = async (req, res) => {
+	res.locals.firstname = req.session.firstname;
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
+
+	// If user is not logged in, redirect to login page
+	if (!req.session.isLoggedIn) {
+		return res.redirect("/login");
+	}
+
+	try {
+		const { userId } = req.session;
+		const user = await Users.findById(userId);
+		const title = "Update";
+		res.render("user/update", { title, user });
+	} catch (error) {
+		console.log(error);
+		res.redirect("user/account");
+	}
+};
+
+// User update handler
+exports.updateHandler = async (req, res) => {
+	try {
+		const { firstname, lastname, email } = req.body;
+
+		// Update user
+		await Users.updateOne(
+			{ _id: new ObjectID(req.session.userId) },
+			{ email: email, firstname: firstname, lastname: lastname }
+		);
+
+		// Update session
+		req.session.firstname = firstname;
+		
+		res.redirect("/account");
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json(error);
+	}
+};
+
 // Delete user
 exports.deleteUser = async (req, res) => {
+	const confirmed = req.query.confirmation;
+
+    if (confirmed !== "true") {
+		return res.redirect("/account");
+    }
+
 	const id = req.session.userId;
 	try {
 		const deletedUser = await Users.findByIdAndDelete(new ObjectID(id));
