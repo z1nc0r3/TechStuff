@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
+const ObjectID = require('mongodb').ObjectId;
 
 const Users = require("../models/users.js");
 
@@ -20,6 +21,7 @@ const upload = multer({ storage: storage }).single("image");
 exports.login = async (req, res) => {
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
 
 	// If user is already logged in, redirect to home page
 	if (req.session.isLoggedIn) {
@@ -44,7 +46,7 @@ exports.loginHandler = async (req, res) => {
         }
 
         req.session.isLoggedIn = true;
-        req.session.userId = user._id;
+        req.session.userId = new ObjectID(user._id);
         req.session.firstname = user.firstname;
 
 		console.log(req.session);
@@ -60,6 +62,7 @@ exports.loginHandler = async (req, res) => {
 exports.register = async (req, res) => {
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
 
 	// If user is already logged in, redirect to home page
 	if (req.session.isLoggedIn) {
@@ -103,5 +106,27 @@ exports.registerHandler = async (req, res) => {
 	} catch (error) {
 		console.log(error);
 		return res.status(500).json(error);
+	}
+};
+
+// User logout handler
+exports.logout = async (req, res) => {
+	req.session.destroy((err) => {
+		if (err) {
+			console.log(err);
+		}
+		res.redirect("/");
+	});
+};
+
+// Delete user
+exports.deleteUser = async (req, res) => {
+	try {
+		const { id } = req.params;
+		await Users.findByIdAndDelete(id);
+		res.redirect("/");
+	} catch (error) {
+		console.log(error);
+		res.redirect("/");
 	}
 };
