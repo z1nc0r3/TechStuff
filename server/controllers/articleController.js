@@ -6,6 +6,7 @@ const Users = require("../models/users.js");
 exports.getArticles = async (req, res) => {
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
 
 	console.log(res.locals);
 
