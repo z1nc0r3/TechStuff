@@ -5,6 +5,7 @@ const articleSheme = new mongoose.Schema({
 	subheadline: String,
 	content: String,
 	author: String,
+	userId: String,
 	image: {
 		data: Buffer,
 		contentType: String,
