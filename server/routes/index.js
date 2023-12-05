@@ -29,4 +29,7 @@ router.get("/", articleController.getArticles);
 router.get("/add", articleController.addArticle);
 router.post("/add", articleController.addArticleHandler);
 
+// Show article
+router.get("/article/:id", articleController.viewArticle);
+
 module.exports = router;

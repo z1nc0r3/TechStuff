@@ -40,6 +40,7 @@ exports.loginHandler = async (req, res) => {
 		req.session.isLoggedIn = true;
 		req.session.userId = user._id;
 		req.session.firstname = user.firstname;
+		req.session.lastname = user.lastname;
 
 		res.redirect("/");
 	} catch (error) {
