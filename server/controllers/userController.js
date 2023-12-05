@@ -5,6 +5,7 @@ const multer = require("multer");
 const ObjectID = require("mongodb").ObjectId;
 
 const Users = require("../models/users.js");
+const Articles = require("../models/articles.js");
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -113,6 +114,7 @@ exports.account = async (req, res) => {
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
+	const title = "Account";
 
 	// If user is not logged in, redirect to login page
 	if (!req.session.isLoggedIn) {
@@ -123,8 +125,13 @@ exports.account = async (req, res) => {
 		const { userId } = req.session;
 		const user = await Users.findById(userId);
 		const profileImage = user.image.data.toString("base64");
-		const title = "Account";
-		res.render("user/account", { title, user, profileImage });
+
+		// get articles by userId
+		const articles = await Articles.find({ userId: userId }).sort({
+			_id: -1,
+		});
+
+		res.render("user/account", { title, user, profileImage, articles });
 	} catch (error) {
 		console.log(error);
 		res.redirect("/", { error: "Error getting user data." });
@@ -159,14 +166,11 @@ exports.updateHandler = async (req, res) => {
 		const { firstname, lastname, email } = req.body;
 
 		// Update user
-		await Users.updateOne(
-			{ _id: new ObjectID(req.session.userId) },
-			{ email: email, firstname: firstname, lastname: lastname }
-		);
+		await Users.updateOne({ _id: new ObjectID(req.session.userId) }, { email: email, firstname: firstname, lastname: lastname });
 
 		// Update session
 		req.session.firstname = firstname;
-		
+
 		res.redirect("/account");
 	} catch (error) {
 		console.log(error);
@@ -178,9 +182,9 @@ exports.updateHandler = async (req, res) => {
 exports.deleteUser = async (req, res) => {
 	const confirmed = req.query.confirmation;
 
-    if (confirmed !== "true") {
+	if (confirmed !== "true") {
 		return res.redirect("/account");
-    }
+	}
 
 	const id = req.session.userId;
 	try {
