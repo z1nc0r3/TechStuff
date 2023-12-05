@@ -1,0 +1,24 @@
+
+<%- include('../partials/head') %> <%- include('../partials/header') %>
+
+<section class="py-5">
+	<div class="container px-4 px-lg-5 my-5">
+		<div class="row gx-4 gx-lg-5 align-items-center">
+			<div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" alt="..." style="object-fit: cover; height: 100%; width: 100%"/></div>
+			<div class="col-md-6">
+				<h1 class="display-7 fw-bolder mb-3"><%= article.headline %></h1>
+				<div class="fs-5 mb-3">
+					<span class="card-subtitle"><%= article.subheadline %></span>
+				</div>
+				<p class="lead">
+                    <%= article.content %>
+				</p>
+				<div class="d-flex">
+                    <span class="card-subtitle"><%= article.author %></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<%- include('../partials/foot') %> <%- include('../partials/footer') %>

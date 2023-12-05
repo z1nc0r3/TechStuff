@@ -44,8 +44,9 @@ exports.addArticleHandler = async (req, res) => {
 			}
 
 			// Get user data
-			const { headline, subheadline, content, author } = req.body;
+			const { headline, subheadline, content } = req.body;
 			const userId = req.session.userId;
+			const author = req.session.firstname + " " + req.session.lastname;
 			const image = {
 				data: req.file.buffer,
 				contentType: req.file.mimetype,
@@ -68,4 +69,17 @@ exports.addArticleHandler = async (req, res) => {
 		console.log(error);
 		res.redirect("/add", { error: "Error creating new article." });
 	}
+};
+
+// View article
+exports.viewArticle = async (req, res) => {
+	res.locals.firstname = req.session.firstname;
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
+
+	const articleId = req.params.id;
+	const article = await Articles.findOne({ _id: articleId });
+
+	const title = article.headline;
+	res.render("article/view", { title, article });
 };
