@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const fs = require("fs");
 const path = require("path");
 const multer = require("multer");
-const ObjectID = require('mongodb').ObjectId;
+const ObjectID = require("mongodb").ObjectId;
 
 const Users = require("../models/users.js");
 
@@ -28,34 +28,32 @@ exports.login = async (req, res) => {
 		return res.redirect("/");
 	}
 
-    const title = "Login";
-    const message = req.flash('error');
-	console.log(message);
-    res.render("user/login", { title, message });
+	const title = "Login";
+	const message = req.flash("error");
+	res.render("user/login", { title, message });
 };
 
 // User login handler
 exports.loginHandler = async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const user = await Users.findOne({ email, password });
+	try {
+		const { email, password } = req.body;
+		const user = await Users.findOne({ email, password });
 
-        if (!user) {
-            req.flash('error', 'Invalid email or password.');
-            return res.redirect('/login');
-        }
+		if (!user) {
+			req.flash("error", "Invalid email or password.");
+			return res.redirect("/login");
+		}
 
-        req.session.isLoggedIn = true;
-        req.session.userId = new ObjectID(user._id);
-        req.session.firstname = user.firstname;
+		req.session.isLoggedIn = true;
+		req.session.userId = user._id;
+		req.session.firstname = user.firstname;
 
-		console.log(req.session);
-        res.redirect("/");
-    } catch (error) {
-        console.log(error);
-        req.flash('error', 'An error occurred.');
-        res.redirect("/login");
-    }
+		res.redirect("/");
+	} catch (error) {
+		console.log(error);
+		req.flash("error", "An error occurred.");
+		res.redirect("/login");
+	}
 };
 
 // User registration page
@@ -119,14 +117,47 @@ exports.logout = async (req, res) => {
 	});
 };
 
-// Delete user
-exports.deleteUser = async (req, res) => {
+// User account page
+exports.account = async (req, res) => {
+	res.locals.firstname = req.session.firstname;
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
+
+	// If user is not logged in, redirect to login page
+	if (!req.session.isLoggedIn) {
+		return res.redirect("/login");
+	}
+
 	try {
-		const { id } = req.params;
-		await Users.findByIdAndDelete(id);
-		res.redirect("/");
+		const { userId } = req.session;
+		const user = await Users.findById(userId);
+		const title = "Account";
+		res.render("user/account", { title, user });
 	} catch (error) {
 		console.log(error);
 		res.redirect("/");
+	}
+};
+
+// Delete user
+exports.deleteUser = async (req, res) => {
+	const id = req.session.userId;
+	try {
+		const deletedUser = await Users.findByIdAndDelete(new ObjectID(id));
+
+		if (!deletedUser) {
+			console.log("User not found");
+			return res.status(404).redirect("/account");
+		}
+
+		req.session.destroy((err) => {
+			if (err) {
+				console.error("Error destroying session:", err);
+			}
+		});
+		res.redirect("/");
+	} catch (error) {
+		console.error("Error deleting user:", error);
+		res.status(500).redirect("/account");
 	}
 };
