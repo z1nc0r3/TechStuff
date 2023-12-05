@@ -2,8 +2,11 @@
 	<div class="collapse navbar-collapse justify-content-center">
 		<div class="nav navbar-nav">
 			<a class="m-2 h4 nav-item nav-link" href="/">Home</a>
-			<a class="m-2 h4 nav-item nav-link" href="/breeds">Breeds</a>
-			<a class="m-2 h4 nav-item nav-link" href="/facts">Facts</a>
+			<% if (typeof user !== 'undefined' && isLoggedIn == true) { %>
+			<a class="m-2 h4 nav-item nav-link" href="/account"><% session.firstname %></a>
+			<% } else { %>
+			<a class="m-2 h4 nav-item nav-link" href="/login">Login</a>
+			<% } %>
 		</div>
 	</div>
 </nav>
