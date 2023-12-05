@@ -9,3 +9,7 @@
 .mr-5 {
     margin-right: 15px !important;
 }
+
+.vh-75 {
+    min-height: 75vh;
+}
