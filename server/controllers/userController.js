@@ -7,7 +7,6 @@ const ObjectID = require("mongodb").ObjectId;
 const Users = require("../models/users.js");
 
 const storage = multer.memoryStorage();
-
 const upload = multer({ storage: storage });
 
 // User login page
@@ -95,7 +94,7 @@ exports.registerHandler = async (req, res) => {
 		});
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json(error);
+		res.redirect("/register", { error: "Error creating new user." });
 	}
 };
 
@@ -128,7 +127,7 @@ exports.account = async (req, res) => {
 		res.render("user/account", { title, user, profileImage });
 	} catch (error) {
 		console.log(error);
-		res.redirect("/");
+		res.redirect("/", { error: "Error getting user data." });
 	}
 };
 
@@ -150,7 +149,7 @@ exports.update = async (req, res) => {
 		res.render("user/update", { title, user });
 	} catch (error) {
 		console.log(error);
-		res.redirect("user/account");
+		res.redirect("/account", { error: "Error getting user data." });
 	}
 };
 
@@ -171,7 +170,7 @@ exports.updateHandler = async (req, res) => {
 		res.redirect("/account");
 	} catch (error) {
 		console.log(error);
-		return res.status(500).json(error);
+		res.redirect("/account", { error: "Error updating user data." });
 	}
 };
 
@@ -200,6 +199,6 @@ exports.deleteUser = async (req, res) => {
 		res.redirect("/");
 	} catch (error) {
 		console.error("Error deleting user:", error);
-		res.status(500).redirect("/account");
+		res.redirect("/account", { error: "Error deleting user." });
 	}
 };

@@ -1,0 +1,42 @@
+<%- include('../partials/head') %> <%- include('../partials/header') %>
+
+<section class="profile vh-75 d-flex align-items-center">
+	<div class="container py-5 h-100">
+		<div class="my-form">
+			<div class="cotainer">
+				<div class="row justify-content-center m-0">
+					<div class="col-md-8">
+						<div class="card">
+							<div class="card-header text-center h5">Add New Article</div>
+							<div class="card-body px-5 py-5">
+								<form name="add-form" action="/add" method="POST" enctype="multipart/form-data">
+									<div class="form-group mb-4">
+										<label class="mb-1" for="headline">Headline</label>
+										<input id="headline" name="headline" placeholder="Insert Headline" type="text" required class="form-control" />
+									</div>
+									<div class="form-group mb-4">
+										<label class="mb-1" for="subheadline">Sub-Headline</label>
+										<input id="subheadline" name="subheadline" placeholder="Insert Sub Headline" type="text" required class="form-control" />
+									</div>
+									<div class="form-group mb-4">
+										<label class="mb-1" for="content">Content</label>
+										<textarea id="content" name="content" cols="40" rows="10" required class="form-control"></textarea>
+									</div>
+									<div class="form-group mb-4">
+										<label class="mb-1" for="image">Image : </label>
+										<input type="file" id="image" name="image" value="" accept=".png, .jpg, .jpeg" required/>
+									</div>
+									<div class="form-group">
+										<button name="submit" type="submit" class="btn btn-primary">Add Article</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<%- include('../partials/foot') %> <%- include('../partials/footer') %>
