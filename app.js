@@ -2,6 +2,7 @@
 const express = require("express");
 const methodOverride = require('method-override');
 const session = require("express-session");
+const flash = require("connect-flash");
 const path = require("path");
 
 const database = require("./server/config/database.js");
@@ -35,6 +36,9 @@ app.use(
 		},
 	})
 );
+
+// Flash
+app.use(flash());
 
 // Routes
 app.use("/", require("./server/routes/index.js"));
