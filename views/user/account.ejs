@@ -30,7 +30,7 @@
 										<a class="btn btn-primary" href="/update" role="button">Edit Profile</a>
 									</div>
 									<div class="col-6 mb-3">
-										<form class="d-inline" action="/user/delete" method="POST">
+										<form class="d-inline" action="/user/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
 											<input type="hidden" name="id" value="<%= user.id %>" />
 											<button class="btn btn-outline-danger" type="submit">Delete</button>
 										</form>
