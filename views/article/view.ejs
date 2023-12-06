@@ -1,20 +1,31 @@
-
 <%- include('../partials/head') %> <%- include('../partials/header') %>
 
-<section class="py-5">
+<section class="container py-5">
+	<% if (article.userId == userId  && isLoggedIn === true) { %>
+	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom box-shadow">
+		<h5 class="my-0 mr-auto font-weight-normal mr-auto"></h5>
+		<nav class="my-2 my-md-0 mr-md-3">
+			<a class="btn btn-primary" href="/article/edit/<%= article._id %>">Edit Article</a>
+			<form class="d-inline" action="/article/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this article? This cannot be undone.')">
+				<input type="hidden" name="id" value="<%= article._id %>" />
+				<button class="btn btn-outline-danger" type="submit">Delete</button>
+			</form>
+		</nav>
+	</div>
+	<% } %>
 	<div class="container px-4 px-lg-5 my-5">
 		<div class="row gx-4 gx-lg-5 align-items-center">
-			<div class="col-md-6"><img class="card-img-top mb-5 mb-md-0" src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" alt="..." style="object-fit: cover; height: 100%; width: 100%"/></div>
+			<div class="col-md-6">
+				<img class="card-img-top mb-5 mb-md-0" src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" alt="..." style="object-fit: cover; height: 100%; width: 100%" />
+			</div>
 			<div class="col-md-6">
 				<h1 class="display-7 fw-bolder mb-3"><%= article.headline %></h1>
 				<div class="fs-5 mb-3">
 					<span class="card-subtitle"><%= article.subheadline %></span>
 				</div>
-				<p class="lead">
-                    <%= article.content %>
-				</p>
+				<p class="lead"><%= article.content %></p>
 				<div class="d-flex">
-                    <span class="card-subtitle"><%= article.author %></span>
+					<span class="card-subtitle"><%= article.author %></span>
 				</div>
 			</div>
 		</div>
