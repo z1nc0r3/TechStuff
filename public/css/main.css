@@ -22,6 +22,10 @@
     font-weight: 600 !important;
 }
 
+.font-weight-700 {
+    font-weight: 700 !important;
+}
+
 .mh-420 {
     min-height: 420px;
 }
