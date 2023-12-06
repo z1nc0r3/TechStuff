@@ -1,9 +1,7 @@
-const mongoose = require("mongoose");
 const Articles = require("../models/articles.js");
-const Users = require("../models/users.js");
 const multer = require("multer");
-const ObjectID = require("mongodb").ObjectId;
 
+// Multer storage for image upload
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -135,7 +133,8 @@ exports.editArticleHandler = async (req, res) => {
 						image,
 					}
 				);
-			} else { // Otherwise, do not update the image
+			} else {
+				// Otherwise, do not update the image
 				// Update article
 				await Articles.findOneAndUpdate(
 					{ _id: articleId },
@@ -166,4 +165,4 @@ exports.deleteArticle = async (req, res) => {
 		console.log(error);
 		res.redirect("/", { error: "Error deleting the article." });
 	}
-}
+};

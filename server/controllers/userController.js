@@ -1,12 +1,11 @@
-const mongoose = require("mongoose");
-const fs = require("fs");
-const path = require("path");
 const multer = require("multer");
 const ObjectID = require("mongodb").ObjectId;
 
+// Models
 const Users = require("../models/users.js");
 const Articles = require("../models/articles.js");
 
+// Multer storage for image upload
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
