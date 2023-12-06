@@ -206,6 +206,8 @@ exports.updateHandler = async (req, res) => {
 					contentType: req.file.mimetype,
 				};
 
+				req.session.profileImage = image;
+
 				// Update user
 				await Users.updateOne({ _id: new ObjectID(req.session.userId) }, { email: email, firstname: firstname, lastname: lastname, image: image });
 			} else {
@@ -215,6 +217,7 @@ exports.updateHandler = async (req, res) => {
 
 			// Update session
 			req.session.firstname = firstname;
+			req.session.lastname = lastname;
 			res.redirect("/account");
 		});
 	} catch (error) {

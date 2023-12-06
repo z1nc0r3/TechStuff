@@ -22,12 +22,12 @@ exports.addArticle = async (req, res) => {
 	if (!req.session.isLoggedIn) {
 		return res.redirect("/login");
 	}
-
+	
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
 	res.locals.profileImage = req.session.profileImage;
-
+	
 	const title = "Add New";
 	res.render("article/add", { title });
 };
