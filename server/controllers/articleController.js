@@ -26,6 +26,7 @@ exports.addArticle = async (req, res) => {
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
+	res.locals.profileImage = req.session.profileImage;
 
 	const title = "Add New";
 	res.render("article/add", { title });
@@ -49,6 +50,7 @@ exports.addArticleHandler = async (req, res) => {
 				data: req.file.buffer,
 				contentType: req.file.mimetype,
 			};
+			const profileImage = req.session.profileImage;
 
 			// Add new article
 			const article = new Articles({
@@ -58,6 +60,7 @@ exports.addArticleHandler = async (req, res) => {
 				author,
 				userId,
 				image,
+				profileImage
 			});
 
 			await article.save();
@@ -160,7 +163,7 @@ exports.deleteArticle = async (req, res) => {
 	try {
 		const articleId = req.body.id;
 		await Articles.findOneAndDelete({ _id: articleId });
-		res.redirect("/account");
+		res.redirect("/");
 	} catch (error) {
 		console.log(error);
 		res.redirect("/", { error: "Error deleting the article." });
