@@ -83,3 +83,50 @@ exports.viewArticle = async (req, res) => {
 	const title = article.headline;
 	res.render("article/view", { title, article });
 };
+
+// Edit article
+exports.editArticle = async (req, res) => {
+	// If user is not logged in, redirect to login page
+	if (!req.session.isLoggedIn) {
+		return res.redirect("/login");
+	}
+
+	res.locals.firstname = req.session.firstname;
+	res.locals.isLoggedIn = req.session.isLoggedIn;
+	res.locals.userId = req.session.userId;
+
+	const articleId = req.params.id;
+	const article = await Articles.findOne({ _id: articleId });
+
+	const title = "Edit Article";
+	res.render("article/edit", { title, article });
+};
+
+// Edit article handler
+exports.editArticleHandler = async (req, res) => {
+	console.log(req.file);
+	console.log(req.body);
+	try {
+		const { headline, subheadline, content } = req.body;
+		const articleId = req.params.id;
+
+		if (req.file) {
+			// If user uploads a new image, update the image data
+			const image = {
+				data: req.file.buffer,
+				contentType: req.file.mimetype,
+			};
+
+			await Articles.updateOne({ _id: articleId }, { headline, subheadline, content, image });
+		} else {
+			// If no new image is uploaded, update other details except the image
+			await Articles.updateOne({ _id: articleId }, { headline, subheadline, content });
+		}
+
+		// Redirect after successful update
+		res.redirect(`/article/${articleId}`);
+	} catch (error) {
+		console.log(error);
+		res.redirect("/", { error: "Error updating article." });
+	}
+};

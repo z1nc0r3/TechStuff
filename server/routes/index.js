@@ -32,4 +32,8 @@ router.post("/add", articleController.addArticleHandler);
 // Show article
 router.get("/article/:id", articleController.viewArticle);
 
+// Edit article
+router.get("/article/edit/:id", articleController.editArticle);
+router.post("/article/edit/:id", articleController.editArticleHandler);
+
 module.exports = router;
