@@ -72,6 +72,7 @@ exports.registerHandler = async (req, res) => {
 	upload.single("image")(req, res, async function (err) {
 		try {
 			if (err instanceof multer.MulterError || err) {
+				// If the file size is too large, redirect to the registration page with an error message
 				if (err.code === "LIMIT_FILE_SIZE") {
 					req.flash("error", "Image size too large.");
 				} else {
@@ -187,6 +188,7 @@ exports.updateHandler = async (req, res) => {
 	try {
 		upload.single("image")(req, res, async function (err) {
 			if (err instanceof multer.MulterError || err) {
+				// If image size is too large, redirect to update page
 				if (err.code === "LIMIT_FILE_SIZE") {
 					req.flash("error", "Image size too large.");
 				} else {
