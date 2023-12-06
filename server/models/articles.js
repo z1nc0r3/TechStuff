@@ -10,6 +10,10 @@ const articleSheme = new mongoose.Schema({
 		data: Buffer,
 		contentType: String,
 	},
+	profileImage: {
+		data: Buffer,
+		contentType: String,
+	},
 });
 
 module.exports = mongoose.model("Article", articleSheme);
