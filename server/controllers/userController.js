@@ -8,7 +8,7 @@ const Articles = require("../models/articles.js");
 
 // Multer storage for image upload
 const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage, limits: { fileSize: 1000000 } });
 
 // User login page
 exports.login = async (req, res) => {
@@ -41,6 +41,7 @@ exports.loginHandler = async (req, res) => {
 		req.session.userId = user._id;
 		req.session.firstname = user.firstname;
 		req.session.lastname = user.lastname;
+		req.session.profileImage = user.image;
 
 		res.redirect("/");
 	} catch (error) {
@@ -71,7 +72,10 @@ exports.registerHandler = async (req, res) => {
 	upload.single("image")(req, res, async function (err) {
 		try {
 			if (err instanceof multer.MulterError || err) {
-				return res.status(500).json({ error: "Error uploading file.", details: err });
+				if (err.code === "LIMIT_FILE_SIZE") {
+					req.flash("error", "Image size too large.");
+				}
+				return res.redirect("/register");
 			}
 
 			const { firstname, lastname, email, password } = req.body;
