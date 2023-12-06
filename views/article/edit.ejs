@@ -9,7 +9,7 @@
 						<div class="card">
 							<div class="card-header text-center h5">Edit Article</div>
 							<div class="card-body px-5 py-5">
-								<form name="my-form" action="" method="POST" enctype="multipart/form-data">
+								<form name="my-form" action="/article/edit/<%= article.id %>" method="POST" enctype="multipart/form-data">
 									<div class="form-group mb-4">
 										<label class="mb-1" for="headline">Headline</label>
 										<input id="headline" name="headline" value="<%= article.headline %>" placeholder="Insert Headline" type="text" required class="form-control" />
@@ -27,7 +27,7 @@
 										<input type="file" id="image" name="image" value="" accept=".png, .jpg, .jpeg" />
 									</div>
 									<div class="form-group">
-										<button name="submit" type="submit" class="btn btn-primary">Update Article</button>
+										<button type="submit" class="btn btn-primary">Update Article</button>
 									</div>
 								</form>
 							</div>

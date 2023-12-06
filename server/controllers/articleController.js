@@ -104,29 +104,54 @@ exports.editArticle = async (req, res) => {
 
 // Edit article handler
 exports.editArticleHandler = async (req, res) => {
-	console.log(req.file);
-	console.log(req.body);
 	try {
-		const { headline, subheadline, content } = req.body;
-		const articleId = req.params.id;
+		upload.single("image")(req, res, async function (err) {
+			if (err instanceof multer.MulterError) {
+				return res.status(500).json(err);
+			} else if (err) {
+				return res.status(500).json(err);
+			}
 
-		if (req.file) {
-			// If user uploads a new image, update the image data
-			const image = {
-				data: req.file.buffer,
-				contentType: req.file.mimetype,
-			};
+			// Get user data
+			const articleId = req.params.id;
+			const { headline, subheadline, content } = req.body;
+			const userId = req.session.userId;
 
-			await Articles.updateOne({ _id: articleId }, { headline, subheadline, content, image });
-		} else {
-			// If no new image is uploaded, update other details except the image
-			await Articles.updateOne({ _id: articleId }, { headline, subheadline, content });
-		}
+			// If the user uploaded a new image, update the image
+			if (req.file) {
+				var image = {
+					data: req.file.buffer,
+					contentType: req.file.mimetype,
+				};
 
-		// Redirect after successful update
-		res.redirect(`/article/${articleId}`);
+				// Update article
+				await Articles.findOneAndUpdate(
+					{ _id: articleId },
+					{
+						headline,
+						subheadline,
+						content,
+						userId,
+						image,
+					}
+				);
+			} else { // Otherwise, do not update the image
+				// Update article
+				await Articles.findOneAndUpdate(
+					{ _id: articleId },
+					{
+						headline,
+						subheadline,
+						content,
+						userId,
+					}
+				);
+			}
+
+			res.redirect("/article/" + articleId);
+		});
 	} catch (error) {
 		console.log(error);
-		res.redirect("/", { error: "Error updating article." });
+		res.redirect("/add", { error: "Error editing the article." });
 	}
 };
