@@ -181,12 +181,6 @@ exports.updateHandler = async (req, res) => {
 
 // Delete user
 exports.deleteUser = async (req, res) => {
-	const confirmed = req.query.confirmation;
-
-	if (confirmed !== "true") {
-		return res.redirect("/account");
-	}
-
 	const id = req.session.userId;
 	try {
 		const deletedUser = await Users.findByIdAndDelete(new ObjectID(id));
