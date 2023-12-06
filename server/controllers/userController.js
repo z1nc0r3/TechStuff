@@ -74,7 +74,10 @@ exports.registerHandler = async (req, res) => {
 			if (err instanceof multer.MulterError || err) {
 				if (err.code === "LIMIT_FILE_SIZE") {
 					req.flash("error", "Image size too large.");
+				} else {
+					req.flash("error", "An error occurred.");
 				}
+
 				return res.redirect("/register");
 			}
 
@@ -111,6 +114,7 @@ exports.registerHandler = async (req, res) => {
 			} else {
 				req.flash("error", "An error occurred.");
 			}
+
 			return res.redirect("/register");
 		}
 	});
@@ -170,7 +174,8 @@ exports.update = async (req, res) => {
 		const { userId } = req.session;
 		const user = await Users.findById(userId);
 		const title = "Update";
-		res.render("user/update", { title, user });
+		const message = req.flash("error");
+		res.render("user/update", { title, user, message });
 	} catch (error) {
 		console.log(error);
 		res.redirect("/account", { error: "Error getting user data." });
@@ -181,11 +186,15 @@ exports.update = async (req, res) => {
 exports.updateHandler = async (req, res) => {
 	try {
 		upload.single("image")(req, res, async function (err) {
-			if (err instanceof multer.MulterError) {
-				return res.status(500).json(err);
-			} else if (err) {
-				return res.status(500).json(err);
+			if (err instanceof multer.MulterError || err) {
+				if (err.code === "LIMIT_FILE_SIZE") {
+					req.flash("error", "Image size too large.");
+				} else {
+					req.flash("error", "An error occurred.");
+				}
+				return res.redirect("/update");
 			}
+
 			const { firstname, lastname, email } = req.body;
 
 			// If the user uploaded a new image, update the image
