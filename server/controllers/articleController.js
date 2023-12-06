@@ -155,3 +155,15 @@ exports.editArticleHandler = async (req, res) => {
 		res.redirect("/add", { error: "Error editing the article." });
 	}
 };
+
+// Delete article
+exports.deleteArticle = async (req, res) => {
+	try {
+		const articleId = req.body.id;
+		await Articles.findOneAndDelete({ _id: articleId });
+		res.redirect("/account");
+	} catch (error) {
+		console.log(error);
+		res.redirect("/", { error: "Error deleting the article." });
+	}
+}

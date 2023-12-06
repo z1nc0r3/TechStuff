@@ -54,9 +54,9 @@
 			<% articles.forEach(article => { %>
 			<div class="col-md-4 mb-4">
 				<div class="card mh-420">
-					<div style="height: 200px; overflow: hidden">
+					<a style="height: 200px; overflow: hidden" href="/article/<%= article.id %>">
 						<img src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" class="card-img-top" alt="Article Image" style="object-fit: cover; height: 100%; width: 100%" />
-					</div>
+					</a>
 
 					<div class="card-body">
 						<h5 class="card-title mb-3"><%= article.headline %></h5>
