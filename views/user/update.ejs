@@ -9,7 +9,7 @@
 						<div class="card">
 							<div class="card-header text-center h5">Profile Update</div>
 							<div class="card-body px-5">
-								<form name="my-form" action="/update" method="POST">
+								<form name="my-form" action="/update" method="POST" enctype="multipart/form-data">
 									<div class="form-group row pb-3 pt-5">
 										<label for="full_name" class="col-md-4 col-form-label text-md-right">First Name</label>
 										<div class="col-md-8">
@@ -28,6 +28,13 @@
 										<label for="email_address" class="col-md-4 col-form-label text-md-right">Email Address</label>
 										<div class="col-md-8">
 											<input class="form-control" id="email" name="email" type="mail" value="<%= user.email %>" required />
+										</div>
+									</div>
+
+									<div class="form-group row pb-5">
+										<label for="present_address" class="col-md-4 col-form-label text-md-right">Profile Picture</label>
+										<div class="col-md-8">
+											<input type="file" id="image" name="image" value="" accept=".png, .jpg, .jpeg" />
 										</div>
 									</div>
 

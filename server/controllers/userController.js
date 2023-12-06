@@ -78,7 +78,6 @@ exports.registerHandler = async (req, res) => {
 
 			// If user didn't upload a image, use default image
 			if (!req.file) {
-				console.log("inside");
 				req.file = {
 					buffer: await fs.readFile("public/images/avatar.jpg"),
 					mimetype: "image/png",
@@ -177,15 +176,32 @@ exports.update = async (req, res) => {
 // User update handler
 exports.updateHandler = async (req, res) => {
 	try {
-		const { firstname, lastname, email } = req.body;
+		upload.single("image")(req, res, async function (err) {
+			if (err instanceof multer.MulterError) {
+				return res.status(500).json(err);
+			} else if (err) {
+				return res.status(500).json(err);
+			}
+			const { firstname, lastname, email } = req.body;
 
-		// Update user
-		await Users.updateOne({ _id: new ObjectID(req.session.userId) }, { email: email, firstname: firstname, lastname: lastname });
+			// If the user uploaded a new image, update the image
+			if (req.file) {
+				var image = {
+					data: req.file.buffer,
+					contentType: req.file.mimetype,
+				};
 
-		// Update session
-		req.session.firstname = firstname;
+				// Update user
+				await Users.updateOne({ _id: new ObjectID(req.session.userId) }, { email: email, firstname: firstname, lastname: lastname, image: image });
+			} else {
+				// Otherwise, do not update the image
+				await Users.updateOne({ _id: new ObjectID(req.session.userId) }, { email: email, firstname: firstname, lastname: lastname });
+			}
 
-		res.redirect("/account");
+			// Update session
+			req.session.firstname = firstname;
+			res.redirect("/account");
+		});
 	} catch (error) {
 		console.log(error);
 		res.redirect("/account", { error: "Error updating user data." });
@@ -199,7 +215,6 @@ exports.deleteUser = async (req, res) => {
 		const deletedUser = await Users.findByIdAndDelete(new ObjectID(id));
 
 		if (!deletedUser) {
-			console.log("User not found");
 			return res.status(404).redirect("/account");
 		}
 
