@@ -1,5 +1,6 @@
 const multer = require("multer");
 const ObjectID = require("mongodb").ObjectId;
+const fs = require("fs").promises;
 
 // Models
 const Users = require("../models/users.js");
@@ -61,28 +62,36 @@ exports.register = async (req, res) => {
 	}
 
 	const title = "Register";
-	res.render("user/register", { title });
+	const message = req.flash("error");
+	res.render("user/register", { title, message });
 };
 
 // User registration handler
 exports.registerHandler = async (req, res) => {
-	try {
-		upload.single("image")(req, res, async function (err) {
-			if (err instanceof multer.MulterError) {
-				return res.status(500).json(err);
-			} else if (err) {
-				return res.status(500).json(err);
+	upload.single("image")(req, res, async function (err) {
+		try {
+			if (err instanceof multer.MulterError || err) {
+				return res.status(500).json({ error: "Error uploading file.", details: err });
 			}
 
-			// Get user data
 			const { firstname, lastname, email, password } = req.body;
+
+			// If user didn't upload a image, use default image
+			if (!req.file) {
+				console.log("inside");
+				req.file = {
+					buffer: await fs.readFile("public/images/avatar.jpg"),
+					mimetype: "image/png",
+				};
+			}
+
 			const image = {
 				data: req.file.buffer,
 				contentType: req.file.mimetype,
 			};
 
 			// Create new user
-			const user = new Users({
+			const newUser = new Users({
 				firstname,
 				lastname,
 				email,
@@ -90,13 +99,18 @@ exports.registerHandler = async (req, res) => {
 				image,
 			});
 
-			await user.save();
-			res.redirect("/");
-		});
-	} catch (error) {
-		console.log(error);
-		res.redirect("/register", { error: "Error creating new user." });
-	}
+			await newUser.save();
+			res.redirect("/login");
+		} catch (error) {
+			console.log(error);
+			if (error.code === 11000) {
+				req.flash("error", "Email already exists.");
+			} else {
+				req.flash("error", "An error occurred.");
+			}
+			return res.redirect("/register");
+		}
+	});
 };
 
 // User logout handler
