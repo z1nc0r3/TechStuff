@@ -16,11 +16,13 @@
 						<img src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" class="card-img-top" alt="Article Image" style="object-fit: cover; height: 100%; width: 100%" />
 					</a>
 
-					<div class="card-body">
-						<h5 class="card-title mb-3"><%= article.headline %></h5>
-						<h6 class="card-subtitle mb-4 text-muted"><%= article.subheadline %></h6>
-						<a href="/article/<%= article.id %>" class="btn btn-primary read-more-btn">Read more</a>
-					</div>
+					<a href="/article/<%= article.id %>" class="text-decoration-none">
+						<div class="card-body">
+							<h5 class="card-title mb-3 text-black"><%= article.headline %></h5>
+							<h6 class="card-subtitle mb-4 text-muted"><%= article.subheadline %></h6>
+							<a href="/article/<%= article.id %>" class="btn btn-primary read-more-btn">Read more</a>
+						</div>
+					</a>
 				</div>
 			</div>
 			<% }); %>
