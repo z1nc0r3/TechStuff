@@ -24,7 +24,8 @@
 					<span class="card-subtitle"><%= article.subheadline %></span>
 				</div>
 				<p class="lead"><%= article.content %></p>
-				<div class="d-flex">
+				<div class="d-flex flex-row justify-content-space-even">
+					<img class="card-img-top mb-5 mb-md-0" src="data:image/jpeg;base64,<%= article.profileImage.data.toString('base64') %>" alt="..." style="object-fit: cover; height: 100%; width: 100%" />
 					<span class="card-subtitle"><%= article.author %></span>
 				</div>
 			</div>
