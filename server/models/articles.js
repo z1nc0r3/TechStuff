@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+// Article schema
 const articleSheme = new mongoose.Schema({
 	headline: String,
 	subheadline: String,

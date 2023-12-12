@@ -1,14 +1,18 @@
 <%- include('partials/head') %> <%- include('partials/header') %>
 
+<!-- Home page -->
 <div class="container mt-4">
 	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom box-shadow">
 		<h5 class="mr-auto"></h5>
+		<!-- Add article button -->
 		<nav class="my-2 my-md-0 mr-md-3">
 			<a class="btn btn-primary" href="/add">Add Article</a>
 		</nav>
 	</div>
 	<div class="container mt-4">
 		<div class="row">
+			<!-- Show all the articles -->
+			<!-- Iterating through all the articles and showing them -->
 			<% articles.forEach(article => { %>
 			<div class="col-md-4 mb-4">
 				<div class="card mh-420">
@@ -16,6 +20,7 @@
 						<img src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" class="card-img-top" alt="Article Image" style="object-fit: cover; height: 100%; width: 100%" />
 					</a>
 
+					<!-- Clickable Article Card view -->
 					<a href="/article/<%= article.id %>" class="text-decoration-none">
 						<div class="card-body">
 							<h5 class="card-title mb-3 text-black"><%= article.headline %></h5>

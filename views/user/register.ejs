@@ -1,5 +1,6 @@
 <%- include('../partials/head') %> <%- include('../partials/header') %>
 
+<!-- User Register page -->
 <section class="profile vh-75 d-flex align-items-center">
 	<div class="container py-5 h-100">
 		<div class="my-form pt-5">
@@ -9,8 +10,10 @@
 						<div class="card">
 							<div class="card-header text-center h5">Register</div>
 							<div class="card-body px-5">
+								<!-- Register form -->
 								<form name="my-form" action="/register" method="POST" enctype="multipart/form-data">
 									<div class="form-group row pb-3 pt-5">
+										<!-- First name input field -->
 										<label for="full_name" class="col-md-4 col-form-label text-md-right">First Name</label>
 										<div class="col-md-8">
 											<input type="text" class="form-control" id="firstname" name="firstname" value="" required />
@@ -18,6 +21,7 @@
 									</div>
 
 									<div class="form-group row pb-3">
+										<!-- Last name input field -->
 										<label for="full_name" class="col-md-4 col-form-label text-md-right">Last Name</label>
 										<div class="col-md-8">
 											<input type="text" class="form-control" id="lastname" name="lastname" value="" required />
@@ -25,6 +29,7 @@
 									</div>
 
 									<div class="form-group row pb-3">
+										<!-- Email address input field -->
 										<label for="email_address" class="col-md-4 col-form-label text-md-right">Email Address</label>
 										<div class="col-md-8">
 											<input class="form-control" id="email" name="email" type="mail" value="" required />
@@ -32,6 +37,7 @@
 									</div>
 
 									<div class="form-group row pb-5">
+										<!-- Password input field -->
 										<label for="present_address" class="col-md-4 col-form-label text-md-right">Password</label>
 										<div class="col-md-8">
 											<input class="form-control" id="password" name="password" value="" type="password" required />
@@ -39,6 +45,7 @@
 									</div>
 
 									<div class="form-group row pb-5">
+										<!-- Profile picture -->
 										<label for="present_address" class="col-md-4 col-form-label text-md-right">Profile Picture</label>
 										<div class="col-md-8">
 											<input type="file" id="image" name="image" value="" accept=".png, .jpg, .jpeg" />

@@ -1,5 +1,6 @@
 <%- include('../partials/head') %> <%- include('../partials/header') %>
 
+<!-- Edit articles page -->
 <section class="profile vh-75 d-flex align-items-center">
 	<div class="container py-5 h-100">
 		<div class="my-form">
@@ -9,6 +10,7 @@
 						<div class="card">
 							<div class="card-header text-center h5">Edit Article</div>
 							<div class="card-body px-5 py-5">
+								<!-- Article editing form -->
 								<form name="my-form" action="/article/edit/<%= article.id %>" method="POST" enctype="multipart/form-data">
 									<div class="form-group mb-4">
 										<label class="mb-1" for="headline">Headline</label>

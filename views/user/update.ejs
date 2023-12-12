@@ -1,5 +1,6 @@
 <%- include('../partials/head') %> <%- include('../partials/header') %>
 
+<!-- User data update page -->
 <section class="profile vh-75 d-flex align-items-center">
 	<div class="container py-5 h-100">
 		<main class="my-form pt-5">
@@ -9,6 +10,7 @@
 						<div class="card">
 							<div class="card-header text-center h5">Profile Update</div>
 							<div class="card-body px-5">
+								<!-- User data update form -->
 								<form name="my-form" action="/update" method="POST" enctype="multipart/form-data">
 									<div class="form-group row pb-3 pt-5">
 										<label for="full_name" class="col-md-4 col-form-label text-md-right">First Name</label>
@@ -31,6 +33,7 @@
 										</div>
 									</div>
 
+									<!-- Updating profile picture is optional -->
 									<div class="form-group row pb-5">
 										<label for="present_address" class="col-md-4 col-form-label text-md-right">Profile Picture</label>
 										<div class="col-md-8">

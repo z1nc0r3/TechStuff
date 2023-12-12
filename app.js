@@ -5,10 +5,11 @@ const session = require("express-session");
 const flash = require("connect-flash");
 const path = require("path");
 
+// Database connection
 const database = require("./server/config/database.js");
-const connectDB = require("./server/config/database.js");
 
-const PORT = 3000;
+// Server setup
+const PORT = 3000; // Port number is predefined
 const app = express();
 
 app.use(express.urlencoded({ extended: true }));
@@ -18,7 +19,7 @@ app.set("view engine", "ejs");
 
 // Database connection
 app.listen(PORT, async () => {
-	await connectDB();
+	await database();
 	console.log(`Server started on port ${PORT}`);
 });
 
@@ -32,7 +33,7 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		cookie: {
-			maxAge: 60 * 60 * 1000 * 24, // 24 hours
+			maxAge: 60 * 60 * 1000 * 24, // Session will last 24 hours
 		},
 	})
 );
@@ -51,6 +52,7 @@ app.get("*", (req, res) => {
 	res.status(404).render("404", { title: "Page Not Found" });
 });
 
+// Closing database connection in case of server termination
 process.on("SIGTERM", () => {
 	app.close(() => {
 		database.client.close();

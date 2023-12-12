@@ -5,7 +5,7 @@ const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-// Get all articles
+// Get all articles (Home page)
 exports.getArticles = async (req, res) => {
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
@@ -23,6 +23,7 @@ exports.addArticle = async (req, res) => {
 		return res.redirect("/login");
 	}
 	
+	// Fetching data from sessions and passing it to the view
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
@@ -35,6 +36,7 @@ exports.addArticle = async (req, res) => {
 // Add article handler
 exports.addArticleHandler = async (req, res) => {
 	try {
+		// Uploading article image
 		upload.single("image")(req, res, async function (err) {
 			if (err instanceof multer.MulterError) {
 				return res.status(500).json(err);
@@ -74,11 +76,13 @@ exports.addArticleHandler = async (req, res) => {
 
 // View article
 exports.viewArticle = async (req, res) => {
+	// Fetching data from sessions and passing it to the view
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
 
 	const articleId = req.params.id;
+	// Find article by ID
 	const article = await Articles.findOne({ _id: articleId });
 
 	const title = article.headline;
@@ -92,11 +96,13 @@ exports.editArticle = async (req, res) => {
 		return res.redirect("/login");
 	}
 
+	// Fetching data from sessions and passing it to the view
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
 
 	const articleId = req.params.id;
+	// Find article by ID
 	const article = await Articles.findOne({ _id: articleId });
 
 	const title = "Edit Article";
@@ -106,6 +112,7 @@ exports.editArticle = async (req, res) => {
 // Edit article handler
 exports.editArticleHandler = async (req, res) => {
 	try {
+		// Uploading article image
 		upload.single("image")(req, res, async function (err) {
 			if (err instanceof multer.MulterError) {
 				return res.status(500).json(err);
@@ -162,6 +169,7 @@ exports.editArticleHandler = async (req, res) => {
 exports.deleteArticle = async (req, res) => {
 	try {
 		const articleId = req.body.id;
+		// Delete article by ID
 		await Articles.findOneAndDelete({ _id: articleId });
 		res.redirect("/");
 	} catch (error) {

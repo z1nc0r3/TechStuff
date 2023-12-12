@@ -1,11 +1,13 @@
 <%- include('../partials/head') %> <%- include('../partials/header') %>
 
+<!-- View articles page -->
 <section class="container py-5">
 	<!-- Users can only delete the articles that they added. -->
 	<% if (article.userId == userId && isLoggedIn === true) { %>
 	<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 border-bottom box-shadow">
 		<h5 class="my-0 mr-auto font-weight-normal mr-auto"></h5>
 		<nav class="my-2 my-md-0 mr-md-3">
+			<!-- Action buttons -->
 			<a class="btn btn-primary" href="/article/edit/<%= article._id %>">Edit Article</a>
 			<form class="d-inline" action="/article/delete" method="POST" onsubmit="return confirm('Are you sure you want to delete this article? This cannot be undone.')">
 				<input type="hidden" name="id" value="<%= article._id %>" />
@@ -19,6 +21,7 @@
 			<div class="row-md-6 mb-4">
 				<img class="card-img-top mb-5 mb-md-0" src="data:image/jpeg;base64,<%= article.image.data.toString('base64') %>" alt="..." style="object-fit: cover; height: 100%; width: 100%" />
 			</div>
+			<!-- View article UI -->
 			<div class="row-md-6">
 				<h1 class="display-7 fw-bolder mb-3"><%= article.headline %></h1>
 				<div class="fs-5 mb-3">

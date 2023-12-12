@@ -12,6 +12,7 @@ const upload = multer({ storage: storage, limits: { fileSize: 1000000 } });
 
 // User login page
 exports.login = async (req, res) => {
+	// Fetching data from sessions and passing it to the view
 	res.locals.firstname = req.session.firstname;
 	res.locals.isLoggedIn = req.session.isLoggedIn;
 	res.locals.userId = req.session.userId;
@@ -29,14 +30,17 @@ exports.login = async (req, res) => {
 // User login handler
 exports.loginHandler = async (req, res) => {
 	try {
+		// Get user data from the login form
 		const { email, password } = req.body;
 		const user = await Users.findOne({ email, password });
 
+		// If user doesn't exist, redirect to login page with an error message
 		if (!user) {
 			req.flash("error", "Invalid email or password.");
 			return res.redirect("/login");
 		}
 
+		// Update session
 		req.session.isLoggedIn = true;
 		req.session.userId = user._id;
 		req.session.firstname = user.firstname;
@@ -92,6 +96,7 @@ exports.registerHandler = async (req, res) => {
 				};
 			}
 
+			// Create image object
 			const image = {
 				data: req.file.buffer,
 				contentType: req.file.mimetype,
@@ -110,6 +115,7 @@ exports.registerHandler = async (req, res) => {
 			res.redirect("/login");
 		} catch (error) {
 			console.log(error);
+			// If the email already exists, redirect to the registration page with an error message
 			if (error.code === 11000) {
 				req.flash("error", "Email already exists.");
 			} else {
@@ -123,6 +129,7 @@ exports.registerHandler = async (req, res) => {
 
 // User logout handler
 exports.logout = async (req, res) => {
+	// Destroy session when logging out
 	req.session.destroy((err) => {
 		if (err) {
 			console.log(err);
@@ -146,7 +153,7 @@ exports.account = async (req, res) => {
 	try {
 		const { userId } = req.session;
 		const user = await Users.findById(userId);
-		const profileImage = user.image.data.toString("base64");
+		const profileImage = user.image.data.toString("base64"); // convert image to base64 string
 
 		// get articles by userId
 		const articles = await Articles.find({ userId: userId }).sort({
@@ -232,10 +239,12 @@ exports.deleteUser = async (req, res) => {
 	try {
 		const deletedUser = await Users.findByIdAndDelete(new ObjectID(id));
 
+		// If user doesn't exist, redirect to account page
 		if (!deletedUser) {
 			return res.status(404).redirect("/account");
 		}
 
+		// Delete user session and redirect to home page
 		req.session.destroy((err) => {
 			if (err) {
 				console.error("Error destroying session:", err);
