@@ -16,7 +16,7 @@
     "express": "^4.22.1",
     "express-session": "^1.18.2",
     "method-override": "^3.0.0",
-    "mongoose": "^8.8.3",
+    "mongoose": "^8.9.5",
     "multer": "^2.0.2"
   }
 }
